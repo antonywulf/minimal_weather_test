@@ -12,8 +12,9 @@
   text-align: center;
   color: #999999;
   font-weight: 400;
-  padding-bottom: 2rem;
-  padding-top: 2rem;
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+  font-size: 1.3rem;
 }
 
 .LoaderList {

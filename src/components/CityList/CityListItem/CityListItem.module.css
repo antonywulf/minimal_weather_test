@@ -1,5 +1,5 @@
 .CityListItem {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   display: flex;
   justify-content: space-between;
   cursor: pointer;
@@ -30,5 +30,5 @@
 }
 
 .CityListItem img:hover {
-  transform: scale(1.8);
+  transform: scale(1.5);
 }

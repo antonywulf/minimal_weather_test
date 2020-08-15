@@ -74,7 +74,7 @@ const LeftCard: React.FC<PropsType> = ({ currentCityWeather }) => {
               <div className={styles.SecondRowBox}>
                 <img
                   className={styles.WeatherIcon}
-                  src={`http://openweathermap.org/img/wn/${
+                  src={`https://openweathermap.org/img/wn/${
                     currentCityWeather.weather![0].icon
                   }@2x.png`}
                   alt="weatherIcon"

@@ -1,9 +1,9 @@
 .City {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   display: flex;
   justify-content: space-between;
   cursor: pointer;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   padding: 1rem;
   border-radius: 0.3rem;
 }

@@ -7,7 +7,8 @@
   text-align: center;
   color: #999999;
   font-weight: 400;
-  padding-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  font-size: 1.3rem;
 }
 
 .SearchCity input {
@@ -15,7 +16,7 @@
   height: 3rem;
   display: block;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: 500;
   background-color: #f3f3f3;
   width: 80%;
