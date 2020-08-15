@@ -3,11 +3,34 @@ import { connect } from 'react-redux';
 
 import styles from './SearchCity.module.css';
 
-import { getCityWeather, addFoundCity, addCityIdToList } from '../../store/actions/cityActions';
+import {
+  getCityWeather,
+  addFoundCity,
+  addCityIdToList,
+  ActionsTypes,
+} from '../../store/actions/cityActions';
 import City from './City/City';
 import Loader from '../Loader/Loader';
 
-const SearchCity = ({
+import { CityType } from '../../store/reducers/cityReducer';
+import { AppStateType } from '../../store/reducers/rootReducer';
+import { Dispatch } from 'redux';
+
+type MapStatePropsType = {
+  foundCity: CityType;
+  isLoading: boolean;
+  error: string;
+};
+
+type MapDispatchPropsType = {
+  getCityWeather: (city: string) => void;
+  addFoundCity: (city: CityType) => void;
+  addCityIdToList: () => void;
+};
+
+type PropsType = MapStatePropsType & MapDispatchPropsType;
+
+const SearchCity: React.FC<PropsType> = ({
   foundCity,
   isLoading,
   error,
@@ -21,11 +44,11 @@ const SearchCity = ({
     addFoundCity({});
   }, [value, addFoundCity]);
 
-  const changeHandler = e => {
+  const changeHandler = (e: { target: { value: string } }) => {
     setValue(e.target.value);
   };
 
-  const submitHandler = e => {
+  const submitHandler = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     value && getCityWeather(value);
   };
@@ -49,9 +72,9 @@ const SearchCity = ({
             <React.Fragment>
               {Object.keys(foundCity).length !== 0 && (
                 <City
-                  name={foundCity.name}
-                  country={foundCity.sys.country}
-                  deg={foundCity.main.temp}
+                  name={foundCity.name!}
+                  country={foundCity.sys!.country!}
+                  deg={foundCity.main!.temp!}
                   addCityIdToList={addCityIdToList}
                 />
               )}
@@ -63,15 +86,15 @@ const SearchCity = ({
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: AppStateType) => ({
   foundCity: state.city.foundCity,
   isLoading: state.city.isLoading,
   error: state.city.error,
 });
 
-const mapDispatchToProps = dispatch => ({
-  getCityWeather: city => dispatch(getCityWeather(city)),
-  addFoundCity: city => dispatch(addFoundCity(city)),
+const mapDispatchToProps = (dispatch: Dispatch<ActionsTypes>) => ({
+  getCityWeather: (city: string) => dispatch(getCityWeather(city)),
+  addFoundCity: (city: CityType) => dispatch(addFoundCity(city)),
   addCityIdToList: () => dispatch(addCityIdToList()),
 });
 

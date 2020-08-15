@@ -5,12 +5,12 @@ const instance = axios.create({
 });
 
 export const weatherAPI = {
-  getWeather(city) {
+  getWeather(city: string) {
     return instance
       .get(`weather?q=${city}&units=metric&appid=330216f9e3042b8a57a7865c3de67865`)
       .then(response => response.data);
   },
-  getWeatherByIDs(IDs) {
+  getWeatherByIDs(IDs: Array<string>) {
     let stringOfIDs = '';
     for (let id of IDs) {
       stringOfIDs += `${id},`;

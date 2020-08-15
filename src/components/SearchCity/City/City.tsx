@@ -2,7 +2,14 @@ import React from 'react';
 
 import styles from './City.module.css';
 
-const City = ({ name, country, deg, addCityIdToList }) => {
+type PropsType = {
+  name: string;
+  country: string;
+  deg: number;
+  addCityIdToList: () => void;
+};
+
+const City: React.FC<PropsType> = ({ name, country, deg, addCityIdToList }) => {
   const onClickHandler = () => {
     addCityIdToList();
   };

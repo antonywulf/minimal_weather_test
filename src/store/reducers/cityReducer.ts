@@ -1,4 +1,45 @@
-const initState = {
+import { ActionsTypes } from '../actions/cityActions';
+
+type WeatherType = {
+  icon?: string;
+  main?: string;
+};
+
+export type CityType = {
+  id?: number;
+  name?: string;
+  sys?: {
+    country?: string;
+    timezone?: number;
+    sunrise?: number;
+    sunset?: number;
+  };
+  weather?: Array<WeatherType>;
+  main?: {
+    temp?: number;
+    temp_max?: number;
+    temp_min?: number;
+    humidity?: number;
+    pressure?: number;
+  };
+  wind?: {
+    speed?: number;
+  };
+  dt?: number;
+};
+
+type InitStateType = {
+  foundCity: CityType;
+  isLoading: boolean;
+  error: string;
+  cityWeatherList: Array<CityType>;
+  currentCityWeather: CityType;
+  cityIDsStr: string;
+  isListLoading: boolean;
+  loadingListError: string;
+};
+
+const initState: InitStateType = {
   foundCity: {},
   isLoading: false,
   error: '',
@@ -9,7 +50,7 @@ const initState = {
   loadingListError: '',
 };
 
-const cityReducer = (state = initState, action) => {
+const cityReducer = (state = initState, action: ActionsTypes) => {
   switch (action.type) {
     case 'LOAD':
       return { ...state, isLoading: true };
@@ -34,19 +75,19 @@ const cityReducer = (state = initState, action) => {
       return {
         ...state,
         currentCityWeather: state.cityWeatherList.filter(
-          city => city.id.toString() === action.cityId
+          city => city.id!.toString() === action.cityId.toString()
         )[0],
       };
     case 'ADD_CITY_ID_TO_LIST':
-      if (!state.cityIDsStr.split(',').filter(id => id === state.foundCity.id.toString()).length) {
-        const newCityIDsStr = state.cityIDsStr + ',' + state.foundCity.id.toString();
+      if (!state.cityIDsStr.split(',').filter(id => id === state.foundCity.id!.toString()).length) {
+        const newCityIDsStr = state.cityIDsStr + ',' + state.foundCity.id!.toString();
         localStorage.setItem('cityIDsList', newCityIDsStr);
         return { ...state, cityIDsStr: newCityIDsStr, foundCity: {}, isListLoading: true };
       }
       return { ...state, foundCity: {} };
     case 'DELETE_CITY_ID_FROM_LIST':
       let cityIDsArray = state.cityIDsStr.split(',');
-      cityIDsArray = cityIDsArray.filter(id => id !== action.id);
+      cityIDsArray = cityIDsArray.filter(id => id !== action.id.toString());
       localStorage.setItem('cityIDsList', cityIDsArray.join());
       return { ...state, cityIDsStr: cityIDsArray.join() };
     default:

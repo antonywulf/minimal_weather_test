@@ -14,10 +14,18 @@ import wind from './img/wind.svg';
 import sunrise from './img/sunrise.svg';
 import sunset from './img/sunset.svg';
 import clock from './img/clock.svg';
-
 import styles from './LeftCard.module.css';
 
-const LeftCard = ({ currentCityWeather }) => {
+import { AppStateType } from '../../store/reducers/rootReducer';
+import { CityType } from '../../store/reducers/cityReducer';
+
+type MapStatePropsType = {
+  currentCityWeather: CityType;
+};
+
+type PropsType = MapStatePropsType;
+
+const LeftCard: React.FC<PropsType> = ({ currentCityWeather }) => {
   let isDay;
   let date;
   let sunriseTime;
@@ -27,14 +35,14 @@ const LeftCard = ({ currentCityWeather }) => {
   if (Object.keys(currentCityWeather).length !== 0) {
     const localTimeZone = -new Date().getTimezoneOffset() / 60;
     const time = moment.unix(
-      currentCityWeather.dt + currentCityWeather.sys.timezone - localTimeZone * 3600
+      currentCityWeather.dt! + currentCityWeather.sys!.timezone! - localTimeZone * 3600
     );
     const hours = time.hours();
     const sunrise = moment.unix(
-      currentCityWeather.sys.sunrise + currentCityWeather.sys.timezone - localTimeZone * 3600
+      currentCityWeather.sys!.sunrise! + currentCityWeather.sys!.timezone! - localTimeZone * 3600
     );
     const sunset = moment.unix(
-      currentCityWeather.sys.sunset + currentCityWeather.sys.timezone - localTimeZone * 3600
+      currentCityWeather.sys!.sunset! + currentCityWeather.sys!.timezone! - localTimeZone * 3600
     );
     isDay = hours >= 5 && hours <= 18;
     date = time.format('llll');
@@ -58,7 +66,7 @@ const LeftCard = ({ currentCityWeather }) => {
             <div className={styles.FirstRow}>
               <p className={styles.FirstRowDate}>{date}</p>
               <p className={styles.FirstRowLocation}>
-                {currentCityWeather.name}, {currentCityWeather.sys.country}
+                {currentCityWeather.name}, {currentCityWeather.sys!.country}
                 <img src={locationIcon} alt="locationIcon" />
               </p>
             </div>
@@ -66,27 +74,29 @@ const LeftCard = ({ currentCityWeather }) => {
               <div className={styles.SecondRowBox}>
                 <img
                   className={styles.WeatherIcon}
-                  src={`http://openweathermap.org/img/wn/${currentCityWeather.weather[0].icon}@2x.png`}
+                  src={`http://openweathermap.org/img/wn/${
+                    currentCityWeather.weather![0].icon
+                  }@2x.png`}
                   alt="weatherIcon"
                 />
-                <p className={styles.SecondRowWeatherName}>{currentCityWeather.weather[0].main}</p>
+                <p className={styles.SecondRowWeatherName}>{currentCityWeather.weather![0].main}</p>
               </div>
               <div className={`${styles.SecondRowBoxC} ${styles.SecondRowBox}`}>
                 <p className={styles.WeatherCurrentTemp}>
-                  {currentCityWeather.main.temp.toFixed()}
+                  {currentCityWeather.main!.temp!.toFixed()}
                 </p>
                 <img className={styles.WeatherC} src={c} alt="c" />
               </div>
               <div className={`${styles.SecondRowBoxTemp} ${styles.SecondRowBox}`}>
                 <div className={`${styles.SecondRowBoxTempItem}`}>
                   <p className={styles.WeatherMaxTemp}>
-                    {currentCityWeather.main.temp_max.toFixed()} &deg;C
+                    {currentCityWeather.main!.temp_max!.toFixed()} &deg;C
                   </p>
                   <img className={`${styles.WeatherTempIcon}`} src={up} alt="up" />
                 </div>
                 <div className={`${styles.SecondRowBoxTempItem}`}>
                   <p className={styles.WeatherMinTemp}>
-                    {currentCityWeather.main.temp_min.toFixed()} &deg;C
+                    {currentCityWeather.main!.temp_min!.toFixed()} &deg;C
                   </p>
                   <img className={`${styles.WeatherTempIcon}`} src={down} alt="down" />
                 </div>
@@ -95,18 +105,18 @@ const LeftCard = ({ currentCityWeather }) => {
             <div className={styles.ThirdRow}>
               <div className={styles.ThirdRowBox}>
                 <img className={styles.ThirdRowIcon} src={humidity} alt="humidity" />
-                <p className={styles.WeatherInfoMain}>{currentCityWeather.main.humidity}%</p>
+                <p className={styles.WeatherInfoMain}>{currentCityWeather.main!.humidity}%</p>
                 <p className={styles.WeatherInfoLabel}>Humidity</p>
               </div>
               <div className={styles.ThirdRowBox}>
                 <img className={styles.ThirdRowIcon} src={pressure} alt="pressure" />
-                <p className={styles.WeatherInfoMain}>{currentCityWeather.main.pressure}mBar</p>
+                <p className={styles.WeatherInfoMain}>{currentCityWeather.main!.pressure}mBar</p>
                 <p className={styles.WeatherInfoLabel}>Pressure</p>
               </div>
               <div className={styles.ThirdRowBox}>
                 <img className={styles.ThirdRowIcon} src={wind} alt="wind" />
                 <p className={styles.WeatherInfoMain}>
-                  {(currentCityWeather.wind.speed * 3.6).toFixed()} km/h
+                  {(currentCityWeather.wind!.speed! * 3.6).toFixed()} km/h
                 </p>
                 <p className={styles.WeatherInfoLabel}>Wind</p>
               </div>
@@ -135,7 +145,7 @@ const LeftCard = ({ currentCityWeather }) => {
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
   currentCityWeather: state.city.currentCityWeather,
 });
 

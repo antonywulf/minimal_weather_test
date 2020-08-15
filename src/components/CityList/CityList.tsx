@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import ScrollToBottom from 'react-scroll-to-bottom';
 
 import styles from './CityList.module.css';
 
 import CityListItem from './CityListItem/CityListItem';
 import {
+  ActionsTypes,
   addCitiesToList,
   addCurrentCityWeather,
   deleteCityIdFromList,
@@ -13,7 +13,27 @@ import {
 } from '../../store/actions/cityActions';
 import Loader from '../Loader/Loader';
 
-const CityList = ({
+import { CityType } from '../../store/reducers/cityReducer';
+import { AppStateType } from '../../store/reducers/rootReducer';
+import { Dispatch } from 'redux';
+
+type MapStatePropsType = {
+  cityWeatherList: Array<CityType>;
+  cityIDsStr: string;
+  isListLoading: boolean;
+  loadingListError: string;
+};
+
+type MapDispatchPropsType = {
+  getCitiesWeatherByIDs: (cityIDs: Array<string>) => void;
+  addCurrentCityWeather: (cityId: number) => void;
+  deleteCityIdFromList: (cityId: number) => void;
+  addCitiesToList: (cities: Array<CityType>) => void;
+};
+
+type PropsType = MapStatePropsType & MapDispatchPropsType;
+
+const CityList: React.FC<PropsType> = ({
   cityWeatherList,
   getCitiesWeatherByIDs,
   addCurrentCityWeather,
@@ -35,19 +55,19 @@ const CityList = ({
   const content = loadingListError ? (
     <p className={styles.WeatherError}>Something went wrong</p>
   ) : (
-    <ScrollToBottom className={`${styles.CityListBox}`}>
+    <div className={`${styles.CityListBox}`}>
       {cityWeatherList.map(city => (
         <CityListItem
           key={city.id}
-          name={city.name}
-          country={city.sys.country}
-          deg={city.main.temp}
-          id={city.id}
+          name={city.name!}
+          country={city.sys!.country!}
+          deg={city.main!.temp!}
+          id={city.id!}
           addCurrentCityWeather={addCurrentCityWeather}
           deleteCityIdFromList={deleteCityIdFromList}
         />
       ))}
-    </ScrollToBottom>
+    </div>
   );
 
   return (
@@ -64,18 +84,18 @@ const CityList = ({
   );
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state: AppStateType) => ({
   cityWeatherList: state.city.cityWeatherList,
   cityIDsStr: state.city.cityIDsStr,
   isListLoading: state.city.isListLoading,
   loadingListError: state.city.loadingListError,
 });
 
-const mapDispatchToProps = dispatch => ({
-  getCitiesWeatherByIDs: cityIDs => dispatch(getCitiesWeatherByIDs(cityIDs)),
-  addCurrentCityWeather: cityId => dispatch(addCurrentCityWeather(cityId)),
-  deleteCityIdFromList: cityId => dispatch(deleteCityIdFromList(cityId)),
-  addCitiesToList: cities => dispatch(addCitiesToList(cities)),
+const mapDispatchToProps = (dispatch: Dispatch<ActionsTypes>) => ({
+  getCitiesWeatherByIDs: (cityIDs: Array<string>) => dispatch(getCitiesWeatherByIDs(cityIDs)),
+  addCurrentCityWeather: (cityId: number) => dispatch(addCurrentCityWeather(cityId)),
+  deleteCityIdFromList: (cityId: number) => dispatch(deleteCityIdFromList(cityId)),
+  addCitiesToList: (cities: Array<CityType>) => dispatch(addCitiesToList(cities)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CityList);
